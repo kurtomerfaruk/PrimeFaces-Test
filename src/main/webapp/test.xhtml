@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="jakarta.faces.html"
+      xmlns:coco="jakarta.faces.composite/ui">
+
+<h:head>
+    <title>PrimeFaces Test</title>
+    <h:outputScript name="test.js"/>
+</h:head>
+<h:body>
+
+    <p:growl id="growl" life="3000"/>
+    <h:form>
+        <p:commandButton value="Dialog1" onclick="PF('dlg1').show()"/>
+        <p:commandButton value="Dialog2" onclick="PF('dlg2').show()"/>
+
+
+    </h:form>
+    <p:dialog header="Header1" widgetVar="dlg1" minHeight="40" width="350" showEffect="fade">
+        <h:form>
+            <h:panelGroup>
+                <div class="ui-inputgroup">
+                    <p:inputText id="string" style="width: 50% !important;min-width: 80px !important;"
+                                 value="#{testView.string}"
+                                 title="String"
+                                 required="true"/>
+                    <p:commandButton icon="pi pi-search" process="@parent"
+                                     actionListener="#{testView.callTest()}" update="growl,@form"
+                                     oncomplete="handleSubmit(xhr,status,args,PF('dlg1'));"
+                                     styleClass="ui-button-info"/>
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+    <p:dialog header="Header2" widgetVar="dlg2" minHeight="40" width="350" showEffect="fade">
+        <h:form>
+            <coco:createpage inputId="string1" value="#{testView.string}" update="growl"
+                             actionListener="#{testView.callTest()}"/>
+        </h:form>
+    </p:dialog>
+
+</h:body>
+</html>
