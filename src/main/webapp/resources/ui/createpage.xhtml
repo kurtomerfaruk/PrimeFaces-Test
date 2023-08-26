@@ -1,31 +1,49 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
       xmlns:composite="jakarta.faces.composite"
+      xmlns:f="jakarta.faces.core"
       xmlns:h="jakarta.faces.html">
 
 <composite:interface>
-   <composite:attribute name="actionListener" method-signature="void actionListener()" required="true"/>
-   <composite:attribute name="value" required="true"/>
-   <composite:attribute name="inputId" default="tcKimlikNo"/>
-   <composite:attribute name="required" default="true"/>
-   <composite:attribute name="update" required="true"/>
+   <composite:attribute name="id"/>
+   <composite:attribute name="widgetVar"/>
+   <composite:attribute name="actionListener" method-signature="void actionListener(jakarta.faces.event.ActionEvent)"
+                        required="true"/>
+   <composite:attribute name="columns" default="2"/>
+   <composite:attribute name="focus"/>
+   <composite:attribute name="onShow"/>
 </composite:interface>
 
 
 <composite:implementation>
+   <p:dialog widgetVar="#{cc.attrs.widgetVar}"
+             modal="true"
+             resizable="false"
+             closeOnEscape="true"
+             header="Yeni Kayıt 1"
+             appendTo="@(body)"
+             responsive="true"
+             fitViewport="true">
 
-   <h:panelGroup>
-      <div class="ui-inputgroup">
-         <p:inputText id="#{cc.attrs.inputId}" style="width: 50% !important;min-width: 80px !important;"
-                      value="#{cc.attrs.value}"
-                      title="String 1"
-                      required="#{cc.attrs.required}"/>
-         <p:commandButton icon="pi pi-search" process="@form"
-                          actionListener="#{cc.attrs.actionListener}"
-                          update="#{cc.attrs.update}"
-                          oncomplete="handleSubmit(xhr,status,args,PF('dlg2'));"
-                          styleClass="ui-button-info"/>
-      </div>
-   </h:panelGroup>
+      <h:form id="#{cc.id}">
+         <p:panelGrid columns="#{cc.attrs.columns}" columnClasses="column" layout="tabular">
+            <composite:insertChildren/>
+            <f:facet name="footer">
+               <div class="pull-right">
+                  <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                   actionListener="#{cc.attrs.actionListener}"
+                                   value="Kaydet"
+                                   update="growl,@form"
+                                   oncomplete="handleSubmit(xhr,status,args,PF('#{cc.attrs.widgetVar}'));"/>
+                  <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                   value="İptal"
+                                   onclick="PF('#{cc.attrs.widgetVar}').hide()" immediate="true">
+                     <p:resetInput target="@form"/>
+                  </p:commandButton>
+               </div>
+            </f:facet>
+         </p:panelGrid>
+      </h:form>
+   </p:dialog>
 </composite:implementation>
 </html>

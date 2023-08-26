@@ -8,7 +8,7 @@
 
 <h:head>
     <title>PrimeFaces Test</title>
-    <h:outputScript name="test.js"/>
+
 </h:head>
 <h:body>
 
@@ -19,28 +19,49 @@
 
 
     </h:form>
-    <p:dialog header="Header1" widgetVar="dlg1" minHeight="40" width="350" showEffect="fade">
-        <h:form>
-            <h:panelGroup>
-                <div class="ui-inputgroup">
-                    <p:inputText id="string" style="width: 50% !important;min-width: 80px !important;"
-                                 value="#{testView.string}"
-                                 title="String"
-                                 required="true"/>
-                    <p:commandButton icon="pi pi-search" process="@parent"
-                                     actionListener="#{testView.callTest()}" update="growl,@form"
-                                     oncomplete="handleSubmit(xhr,status,args,PF('dlg1'));"
-                                     styleClass="ui-button-info"/>
-                </div>
-            </h:panelGroup>
-        </h:form>
-    </p:dialog>
-    <p:dialog header="Header2" widgetVar="dlg2" minHeight="40" width="350" showEffect="fade">
-        <h:form>
-            <coco:createpage inputId="string1" value="#{testView.string}" update="growl"
-                             actionListener="#{testView.callTest()}"/>
-        </h:form>
-    </p:dialog>
+    <p:dialog widgetVar="dlg1"
+              modal="true"
+              resizable="false"
+              closeOnEscape="true"
+              header="Yeni Kayıt"
+              appendTo="@(body)"
+              responsive="true"
+              onShow="PF('dlg1').initPosition();"
+              fitViewport="true">
 
+        <h:form id="denemeForm1">
+            <p:panelGrid columns="2" columnClasses="column" layout="tabular">
+
+                <p:outputLabel value="String" for="@next"/>
+                <p:inputText id="string" style="width: 50% !important;min-width: 80px !important;"
+                             value="#{testView.string}"
+                             title="String"
+                             required="true"/>
+
+                <f:facet name="footer">
+                    <div class="pull-right">
+                        <p:commandButton icon="pi pi-check" styleClass="ui-button-success"
+                                         actionListener="#{testView.callTest()}"
+                                         value="Kaydet"
+                                         update="growl,@form"
+                                         oncomplete="handleSubmit(xhr,status,args,PF('dlg1'));"/>
+                        <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                         value="İptal"
+                                         onclick="PF('dlg1').hide()" immediate="true">
+                            <p:resetInput target="@form"/>
+                        </p:commandButton>
+                    </div>
+                </f:facet>
+            </p:panelGrid>
+        </h:form>
+    </p:dialog>
+    <coco:createpage actionListener="#{testView.callTest()}" widgetVar="dlg2" id="denemeForm2">
+        <p:outputLabel value="String1" for="@next"/>
+        <p:inputText id="string1" style="width: 50% !important;min-width: 80px !important;"
+                     value="#{testView.string}"
+                     title="String"
+                     required="true"/>
+    </coco:createpage>
+    <h:outputScript name="test.js"/>
 </h:body>
 </html>
